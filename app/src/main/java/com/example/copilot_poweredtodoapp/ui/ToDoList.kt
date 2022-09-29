@@ -1,15 +1,16 @@
 package com.example.copilot_poweredtodoapp.ui
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Card
 import androidx.compose.material.Checkbox
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.example.copilot_poweredtodoapp.data.ToDoFakeData
 import com.example.copilot_poweredtodoapp.data.ToDoItem
 
@@ -20,16 +21,35 @@ fun ToDoItem(
     toDoItem: ToDoItem,
     onCheckedChange: (Boolean) -> Unit
 ) {
-    Row(
-        modifier = Modifier.fillMaxWidth()
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
+        elevation = 8.dp,
     ) {
-        Checkbox(
-            checked = toDoItem.isDone,
-            onCheckedChange = onCheckedChange
-        )
-        Column {
-            Text(text = toDoItem.title)
-            Text(text = toDoItem.description)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+        ) {
+            Checkbox(
+                checked = toDoItem.isDone,
+                onCheckedChange = onCheckedChange
+            )
+            Column(
+                modifier = Modifier.align(
+                    alignment = Alignment.CenterVertically
+                ).fillMaxHeight()
+            ) {
+                Text(
+                    text = toDoItem.title,
+                    modifier = Modifier.padding(start = 8.dp)
+                )
+                Text(
+                    text = toDoItem.description,
+                    modifier = Modifier.padding(start = 8.dp)
+                )
+            }
         }
     }
 }

@@ -39,7 +39,7 @@ fun ToDoItem(
             Column(
                 modifier = Modifier.align(
                     alignment = Alignment.CenterVertically
-                ).fillMaxHeight()
+                )
             ) {
                 Text(
                     text = toDoItem.title,

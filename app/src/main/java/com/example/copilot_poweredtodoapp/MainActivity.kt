@@ -10,6 +10,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.copilot_poweredtodoapp.data.ToDoFakeData
+import com.example.copilot_poweredtodoapp.ui.ToDoList
 import com.example.copilot_poweredtodoapp.ui.theme.CopilotPoweredToDoAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -22,7 +24,12 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Greeting("Android")
+                    ToDoList(
+                        toDoList = ToDoFakeData,
+                        onCheckedChange = { toDoItem, isChecked ->
+                            println("ToDoItem: $toDoItem, isChecked: $isChecked")
+                        }
+                    )
                 }
             }
         }

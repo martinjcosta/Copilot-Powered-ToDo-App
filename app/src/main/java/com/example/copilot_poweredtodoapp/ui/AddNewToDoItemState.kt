@@ -13,7 +13,8 @@ data class AddNewToDoItemState(
     val description: String = "",
     val isTitleValid: Boolean = false,
     val isDescriptionValid: Boolean = false,
-    val isFormValid: Boolean = false
+    val isFormValid: Boolean = false,
+    val showToast: Boolean = false
 ) {
     fun titleChanged(title: String) = copy(title = title, isTitleValid = title.isNotBlank())
     fun descriptionChanged(description: String) =

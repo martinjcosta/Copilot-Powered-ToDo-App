@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.copilot_poweredtodoapp.data.ToDoItem
 import com.example.copilot_poweredtodoapp.data.ToDoListRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class ToDoListVM(
@@ -25,6 +26,10 @@ class ToDoListVM(
             if (addNewToDoItemState.value.isFormValid) {
                 toDoList.value = toDoList.value + toDoItem
                 addNewToDoItemState.value = addNewToDoItemState.value.copy(show = false)
+            } else {
+                addNewToDoItemState.value = addNewToDoItemState.value.copy(showToast = true)
+                delay(2000)
+                addNewToDoItemState.value = addNewToDoItemState.value.copy(showToast = false)
             }
         }
     }

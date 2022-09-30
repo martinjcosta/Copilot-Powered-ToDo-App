@@ -3,8 +3,11 @@ package com.example.copilot_poweredtodoapp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -12,6 +15,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.copilot_poweredtodoapp.data.ToDoItem
@@ -96,23 +101,40 @@ class MainActivity : ComponentActivity() {
                                     viewModel.cancelAddNewToDoItem()
                                 }
                             )
+
+                            AnimatedVisibility(
+                                visible = viewModel.addNewToDoItemState.value.showToast,
+                                enter = androidx.compose.animation.fadeIn(),
+                                exit = androidx.compose.animation.fadeOut(),
+                                modifier = Modifier.align(Alignment.BottomCenter)
+                            ) {
+                                Text(
+                                    modifier = Modifier
+                                        .align(Alignment.Center)
+                                        .padding(16.dp)
+                                        .background(Color.White)
+                                        .height(100.dp),
+                                    text = "Title and description must be non-empty and only use English words",
+                                    textAlign = TextAlign.Center
+                                )
+                            }
                         }
                     }
                 }
             }
         }
     }
+}
 
-    @Composable
-    fun Greeting(name: String) {
-        Text(text = "Hello $name!")
-    }
+@Composable
+fun Greeting(name: String) {
+    Text(text = "Hello $name!")
+}
 
-    @Preview(showBackground = true)
-    @Composable
-    fun DefaultPreview() {
-        CopilotPoweredToDoAppTheme {
-            Greeting("Android")
-        }
+@Preview(showBackground = true)
+@Composable
+fun DefaultPreview() {
+    CopilotPoweredToDoAppTheme {
+        Greeting("Android")
     }
 }

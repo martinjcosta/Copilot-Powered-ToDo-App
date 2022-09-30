@@ -1,13 +1,14 @@
 package com.example.copilot_poweredtodoapp.ui
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Card
-import androidx.compose.material.Checkbox
-import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.material.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -18,6 +19,41 @@ import com.example.copilot_poweredtodoapp.data.ToDoFakeData
 import com.example.copilot_poweredtodoapp.data.ToDoItem
 import org.burnoutcrew.reorderable.*
 
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun DismissableToDoItem(
+    toDoItem: ToDoItem,
+    onCheckedChange: (Boolean) -> Unit,
+    state: ReorderableLazyListState
+) {
+    val dismissState = rememberDismissState(
+        initialValue = DismissValue.Default
+    )
+
+    SwipeToDismiss(
+        state = dismissState,
+        background = {
+            // Animate visibility of the background based on the horizontal position of the item as it is dismissed
+            val alpha by animateFloatAsState(
+                targetValue = if (dismissState.dismissDirection == null) 0f else {
+                    dismissState.progress.fraction / 3.0f
+                }
+            )
+
+            DismissBackground(
+                alpha = alpha,
+            )
+        },
+        dismissContent = {
+            ToDoItem(
+                toDoItem = toDoItem,
+                onCheckedChange = onCheckedChange,
+                state = state
+            )
+        },
+        directions = setOf(DismissDirection.EndToStart)
+    )
+}
 
 // My To-do Item Compose UI with a checkbox, title, and description
 @Composable
@@ -89,7 +125,7 @@ fun ToDoList(
     ) {
         items(items = toDoList, key = { it.title }, itemContent = { toDoItem ->
             ReorderableItem(reorderableState = state, key = toDoItem.title) {
-                ToDoItem(
+                DismissableToDoItem(
                     toDoItem = toDoItem,
                     onCheckedChange = { isChecked ->
                         onCheckedChange(toDoItem, isChecked)
@@ -98,6 +134,45 @@ fun ToDoList(
                 )
             }
         })
+    }
+}
+
+@Composable
+fun DismissBackground(
+    alpha: Float
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+            .padding(12.dp)
+            .background(
+                // Light grey color
+                color = MaterialTheme.colors.onSurface.copy(alpha = alpha),
+            )
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = "Delete",
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Image(
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .padding(start = 8.dp)
+                    .size(24.dp),
+                painter = painterResource(id = R.drawable.ic_delete),
+                contentDescription = "Delete"
+            )
+        }
     }
 }
 
@@ -118,5 +193,23 @@ fun ToDoItemPreview() {
         toDoItem = ToDoFakeData[0],
         onCheckedChange = { },
         state = rememberReorderableLazyListState(onMove = { _, _ -> })
+    )
+}
+
+@Preview
+@Composable
+fun DismissableToDoItemPreview() {
+    DismissableToDoItem(
+        toDoItem = ToDoFakeData[0],
+        onCheckedChange = { },
+        state = rememberReorderableLazyListState(onMove = { _, _ -> })
+    )
+}
+
+@Preview
+@Composable
+fun DismissBackgroundPreview() {
+    DismissBackground(
+        alpha = 0.1f
     )
 }

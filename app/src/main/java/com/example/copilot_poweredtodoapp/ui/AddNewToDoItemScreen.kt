@@ -92,5 +92,9 @@ fun AddNewToDoItemScreen(
 @Preview
 @Composable
 fun AddNewToDoItemScreenPreview() {
-    AddNewToDoItemScreen()
+    AddNewToDoItemScreen(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+    )
 }

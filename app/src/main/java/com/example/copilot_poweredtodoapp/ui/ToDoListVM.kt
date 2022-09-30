@@ -1,5 +1,6 @@
 package com.example.copilot_poweredtodoapp.ui
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.copilot_poweredtodoapp.data.ToDoItem
 import com.example.copilot_poweredtodoapp.data.ToDoListRepository
@@ -7,6 +8,8 @@ import com.example.copilot_poweredtodoapp.data.ToDoListRepository
 class ToDoListVM(
     private val toDoListRepository: ToDoListRepository
 ) : ViewModel() {
+
+    val addNewToDoItemState = mutableStateOf(AddNewToDoItemState())
 
     val toDoList = toDoListRepository.getToDoList()
 

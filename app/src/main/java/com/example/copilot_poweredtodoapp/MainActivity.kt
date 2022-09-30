@@ -16,13 +16,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.copilot_poweredtodoapp.data.ToDoFakeData
+import com.example.copilot_poweredtodoapp.data.ToDoListRepositoryImpl
+import com.example.copilot_poweredtodoapp.ui.AddNewToDoItemScreen
 import com.example.copilot_poweredtodoapp.ui.AddToDoFAB
 import com.example.copilot_poweredtodoapp.ui.ToDoList
+import com.example.copilot_poweredtodoapp.ui.ToDoListVM
 import com.example.copilot_poweredtodoapp.ui.theme.CopilotPoweredToDoAppTheme
 
 class MainActivity : ComponentActivity() {
 
     private val toDoList = mutableStateOf(ToDoFakeData)
+
+    private val toDoListRepository = ToDoListRepositoryImpl()
+
+    private val viewModel = ToDoListVM(
+        toDoListRepository
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,29 +43,39 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     Box(modifier = Modifier.fillMaxSize()) {
-                        ToDoList(
-                            toDoList = toDoList.value,
-                            onCheckedChange = { toDoItem, isChecked ->
-                                toDoList.value = toDoList.value.map {
-                                    if (it == toDoItem) {
-                                        it.copy(isDone = isChecked)
-                                    } else {
-                                        it
+                        if (!viewModel.addNewToDoItemState.value.show) {
+                            ToDoList(
+                                toDoList = toDoList.value,
+                                onCheckedChange = { toDoItem, isChecked ->
+                                    toDoList.value = toDoList.value.map {
+                                        if (it == toDoItem) {
+                                            it.copy(isDone = isChecked)
+                                        } else {
+                                            it
+                                        }
                                     }
+
+                                    println("ToDoItem: $toDoItem, isChecked: $isChecked")
                                 }
+                            )
 
-                                println("ToDoItem: $toDoItem, isChecked: $isChecked")
-                            }
-                        )
+                            // Floating Action Button in bottom right corner of screen with padding
+                            AddToDoFAB(
+                                modifier = Modifier.align(Alignment.BottomEnd)
+                                    .padding(16.dp),
+                                onClick = {
+                                    viewModel.addNewToDoItemState.value = viewModel.addNewToDoItemState.value.copy(
+                                        show = true
+                                    )
+                                }
+                            )
+                        }
 
-                        // Floating Action Button in bottom right corner of screen with padding
-                        AddToDoFAB(
-                            modifier = Modifier.align(Alignment.BottomEnd)
-                                .padding(16.dp),
-                            onClick = {
-                                toDoList.value = toDoList.value + ToDoFakeData[0]
-                            }
-                        )
+                        else {
+                            AddNewToDoItemScreen(
+                                modifier = Modifier.align(Alignment.Center).padding(16.dp)
+                            )
+                        }
                     }
                 }
             }

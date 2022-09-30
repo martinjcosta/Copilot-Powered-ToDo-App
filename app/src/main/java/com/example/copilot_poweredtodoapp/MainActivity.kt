@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -117,6 +118,16 @@ class MainActivity : ComponentActivity() {
                                     text = "Title and description must be non-empty and only use English words",
                                     textAlign = TextAlign.Center
                                 )
+                            }
+
+                            // Use AnimatedVisibility to show/hide a loading indicator
+                            AnimatedVisibility(
+                                visible = viewModel.addNewToDoItemState.value.loading,
+                                enter = androidx.compose.animation.fadeIn(),
+                                exit = androidx.compose.animation.fadeOut(),
+                                modifier = Modifier.align(Alignment.Center)
+                            ) {
+                                CircularProgressIndicator()
                             }
                         }
                     }

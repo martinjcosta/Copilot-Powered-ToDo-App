@@ -14,12 +14,15 @@ data class AddNewToDoItemState(
     val isTitleValid: Boolean = false,
     val isDescriptionValid: Boolean = false,
     val isFormValid: Boolean = false,
-    val showToast: Boolean = false
+    val showToast: Boolean = false,
+    val loading: Boolean = false
 ) {
     fun titleChanged(title: String) = copy(title = title, isTitleValid = title.isNotBlank())
     fun descriptionChanged(description: String) =
         copy(description = description, isDescriptionValid = description.isNotBlank())
     suspend fun validateForm() = copy(isFormValid = isTitleValid && isDescriptionValid && doesNotContainTypos())
+    fun loading() = copy(loading = true)
+    fun doneLoading() = copy(loading = false)
 }
 
 suspend fun AddNewToDoItemState.doesNotContainTypos(): Boolean {

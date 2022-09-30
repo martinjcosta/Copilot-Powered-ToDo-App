@@ -21,7 +21,9 @@ class ToDoListVM(
         addNewToDoItemState.value = addNewToDoItemState.value.descriptionChanged(toDoItem.description)
 
         viewModelScope.launch {
+            addNewToDoItemState.value = addNewToDoItemState.value.loading()
             addNewToDoItemState.value = addNewToDoItemState.value.validateForm()
+            addNewToDoItemState.value = addNewToDoItemState.value.doneLoading()
 
             if (addNewToDoItemState.value.isFormValid) {
                 toDoList.value = toDoList.value + toDoItem

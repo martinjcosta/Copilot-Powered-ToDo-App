@@ -16,11 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.copilot_poweredtodoapp.data.ToDoFakeData
+import com.example.copilot_poweredtodoapp.data.ToDoItem
 import com.example.copilot_poweredtodoapp.data.ToDoListRepositoryImpl
-import com.example.copilot_poweredtodoapp.ui.AddNewToDoItemScreen
-import com.example.copilot_poweredtodoapp.ui.AddToDoFAB
-import com.example.copilot_poweredtodoapp.ui.ToDoList
-import com.example.copilot_poweredtodoapp.ui.ToDoListVM
+import com.example.copilot_poweredtodoapp.ui.*
 import com.example.copilot_poweredtodoapp.ui.theme.CopilotPoweredToDoAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -61,7 +59,8 @@ class MainActivity : ComponentActivity() {
 
                             // Floating Action Button in bottom right corner of screen with padding
                             AddToDoFAB(
-                                modifier = Modifier.align(Alignment.BottomEnd)
+                                modifier = Modifier
+                                    .align(Alignment.BottomEnd)
                                     .padding(16.dp),
                                 onClick = {
                                     viewModel.addNewToDoItemState.value = viewModel.addNewToDoItemState.value.copy(
@@ -73,7 +72,25 @@ class MainActivity : ComponentActivity() {
 
                         else {
                             AddNewToDoItemScreen(
-                                modifier = Modifier.align(Alignment.Center).padding(16.dp)
+                                modifier = Modifier
+                                    .align(Alignment.Center)
+                                    .padding(16.dp),
+                                onSave = { title, description ->
+                                    toDoList.value = toDoList.value + ToDoItem(
+                                        title = title,
+                                        description = description,
+                                        isDone = false
+                                    )
+
+                                    viewModel.addNewToDoItemState.value = viewModel.addNewToDoItemState.value.copy(
+                                        show = false
+                                    )
+                                },
+                                onCancel = {
+                                    viewModel.addNewToDoItemState.value = viewModel.addNewToDoItemState.value.copy(
+                                        show = false
+                                    )
+                                }
                             )
                         }
                     }

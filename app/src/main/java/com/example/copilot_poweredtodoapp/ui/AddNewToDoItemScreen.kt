@@ -19,9 +19,11 @@ import androidx.compose.ui.unit.dp
 // There is a save button that will save the ToDoItem and navigate back to the ToDoList
 @Composable
 fun AddNewToDoItemScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onSave: (title: String, description: String) -> Unit,
+    onCancel: () -> Unit
 ) {
-    val titleState  = remember {
+    val titleState = remember {
         mutableStateOf(TextFieldValue())
     }
 
@@ -51,7 +53,7 @@ fun AddNewToDoItemScreen(
                     .height(80.dp)
                     .padding(8.dp),
                 value = titleState.value,
-                onValueChange = {},
+                onValueChange = { titleState.value = it },
                 shape = RoundedCornerShape(8.dp),
                 placeholder = { Text("Title") }
             )
@@ -63,30 +65,45 @@ fun AddNewToDoItemScreen(
                     .padding(bottom = 16.dp),
                 value = descriptionState.value,
                 shape = RoundedCornerShape(8.dp),
-                onValueChange = {},
+                onValueChange = { descriptionState.value = it },
                 placeholder = { Text("Description") }
             )
 
-            // Green Save button on the bottom right
-            Button(
-                modifier =
+            Row {
+                // Green Save button
+                Button(
+                    modifier =
                     Modifier
                         .width(100.dp)
                         .padding(8.dp)
                         .padding(bottom = 16.dp),
-                onClick = { /*TODO*/ },
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color(0xFF00C853)
-                )
-            ) {
-                Text(text = "Save")
+                    onClick = { onSave(titleState.value.text, descriptionState.value.text) },
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = Color(0xFF00C853)
+                    )
+                ) {
+                    Text(text = "Save")
 
+                }
+
+                // Green Cancel Button
+                Button(
+                    modifier =
+                    Modifier
+                        .width(100.dp)
+                        .padding(8.dp)
+                        .padding(bottom = 16.dp),
+                    onClick = { onCancel() },
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = Color(0xFF00C853)
+                    )
+                ) {
+                    Text(text = "Cancel")
+                }
             }
         }
     }
 }
-
-
 
 
 @Preview
@@ -95,6 +112,8 @@ fun AddNewToDoItemScreenPreview() {
     AddNewToDoItemScreen(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight()
+            .fillMaxHeight(),
+        onSave = { _, _ -> },
+        onCancel = { }
     )
 }

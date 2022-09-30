@@ -43,7 +43,11 @@ class ToDoListVM(
     }
 
     private fun updateToDoItem(from: ToDoItem, to: ToDoItem) {
-        toDoList.value = toDoList.value.map { if (it == from) to else it }
+        toDoList.value = toDoList.value.map {
+            if (it == from) to.copy(
+                isDone = from.isDone
+            ) else it
+        }
     }
 
     /*fun updateToDoItem(toDoItem: ToDoItem) {

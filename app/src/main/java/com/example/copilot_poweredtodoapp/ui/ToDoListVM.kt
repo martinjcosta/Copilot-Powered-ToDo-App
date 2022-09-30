@@ -11,10 +11,10 @@ class ToDoListVM(
 
     val addNewToDoItemState = mutableStateOf(AddNewToDoItemState())
 
-    val toDoList = toDoListRepository.getToDoList()
+    val toDoList = mutableStateOf(toDoListRepository.getToDoList())
 
     fun addToDoItem(toDoItem: ToDoItem) {
-        toDoListRepository.addToDoItem(toDoItem)
+        toDoList.value = toDoList.value + toDoItem
     }
 
     fun updateToDoItem(toDoItem: ToDoItem) {

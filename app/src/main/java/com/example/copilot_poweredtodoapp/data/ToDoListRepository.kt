@@ -2,20 +2,15 @@ package com.example.copilot_poweredtodoapp.data
 
 interface ToDoListRepository {
     fun getToDoList(): List<ToDoItem>
-    fun addToDoItem(toDoItem: ToDoItem)
     fun updateToDoItem(toDoItem: ToDoItem)
     fun deleteToDoItem(toDoItem: ToDoItem)
 }
 
 class ToDoListRepositoryImpl : ToDoListRepository {
-    private val toDoList = mutableListOf<ToDoItem>()
+    private val toDoList = ToDoFakeData.toMutableList()
 
     override fun getToDoList(): List<ToDoItem> {
         return toDoList
-    }
-
-    override fun addToDoItem(toDoItem: ToDoItem) {
-        toDoList.add(toDoItem)
     }
 
     override fun updateToDoItem(toDoItem: ToDoItem) {

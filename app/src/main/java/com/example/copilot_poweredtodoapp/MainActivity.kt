@@ -10,26 +10,28 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.copilot_poweredtodoapp.data.ToDoFakeData
 import com.example.copilot_poweredtodoapp.data.ToDoItem
 import com.example.copilot_poweredtodoapp.data.ToDoListRepositoryImpl
-import com.example.copilot_poweredtodoapp.ui.*
+import com.example.copilot_poweredtodoapp.ui.AddNewToDoItemScreen
+import com.example.copilot_poweredtodoapp.ui.AddToDoFAB
+import com.example.copilot_poweredtodoapp.ui.ToDoList
+import com.example.copilot_poweredtodoapp.ui.ToDoListVM
 import com.example.copilot_poweredtodoapp.ui.theme.CopilotPoweredToDoAppTheme
 
 class MainActivity : ComponentActivity() {
-
-    private val toDoList = mutableStateOf(ToDoFakeData)
 
     private val toDoListRepository = ToDoListRepositoryImpl()
 
     private val viewModel = ToDoListVM(
         toDoListRepository
     )
+
+    private val toDoList
+        get() = viewModel.toDoList
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,33 +68,37 @@ class MainActivity : ComponentActivity() {
                                     .align(Alignment.BottomEnd)
                                     .padding(16.dp),
                                 onClick = {
-                                    viewModel.addNewToDoItemState.value = viewModel.addNewToDoItemState.value.copy(
-                                        show = true
-                                    )
+                                    viewModel.addNewToDoItemState.value =
+                                        viewModel.addNewToDoItemState.value.copy(
+                                            show = true
+                                        )
                                 }
                             )
-                        }
-
-                        else {
+                        } else {
                             AddNewToDoItemScreen(
                                 modifier = Modifier
                                     .align(Alignment.Center)
                                     .padding(16.dp),
                                 onSave = { title, description ->
-                                    toDoList.value = toDoList.value + ToDoItem(
-                                        title = title,
-                                        description = description,
-                                        isDone = false
+
+                                    viewModel.addToDoItem(
+                                        ToDoItem(
+                                            title = title,
+                                            description = description,
+                                            isDone = false
+                                        )
                                     )
 
-                                    viewModel.addNewToDoItemState.value = viewModel.addNewToDoItemState.value.copy(
-                                        show = false
-                                    )
+                                    viewModel.addNewToDoItemState.value =
+                                        viewModel.addNewToDoItemState.value.copy(
+                                            show = false
+                                        )
                                 },
                                 onCancel = {
-                                    viewModel.addNewToDoItemState.value = viewModel.addNewToDoItemState.value.copy(
-                                        show = false
-                                    )
+                                    viewModel.addNewToDoItemState.value =
+                                        viewModel.addNewToDoItemState.value.copy(
+                                            show = false
+                                        )
                                 }
                             )
                         }

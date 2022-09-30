@@ -96,7 +96,6 @@ class MainActivity : ComponentActivity() {
                                     .align(Alignment.Center)
                                     .padding(16.dp),
                                 onSave = { title, description ->
-
                                     viewModel.addToDoItem(
                                         ToDoItem(
                                             title = title,

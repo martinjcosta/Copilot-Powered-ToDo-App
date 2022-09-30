@@ -26,7 +26,13 @@ class ToDoListVM(
             addNewToDoItemState.value = addNewToDoItemState.value.doneLoading()
 
             if (addNewToDoItemState.value.isFormValid) {
-                toDoList.value = toDoList.value + toDoItem
+                val beingEdited = addNewToDoItemState.value.toDoItem
+                if (toDoList.value.contains(beingEdited)) {
+                    beingEdited?.let { updateToDoItem(from = it, to = toDoItem) }
+                } else {
+                    toDoList.value = toDoList.value + toDoItem
+                }
+
                 addNewToDoItemState.value = addNewToDoItemState.value.copy(show = false)
             } else {
                 addNewToDoItemState.value = addNewToDoItemState.value.copy(showToast = true)
@@ -34,6 +40,10 @@ class ToDoListVM(
                 addNewToDoItemState.value = addNewToDoItemState.value.copy(showToast = false)
             }
         }
+    }
+
+    private fun updateToDoItem(from: ToDoItem, to: ToDoItem) {
+        toDoList.value = toDoList.value.map { if (it == from) to else it }
     }
 
     /*fun updateToDoItem(toDoItem: ToDoItem) {

@@ -60,6 +60,9 @@ class MainActivity : ComponentActivity() {
                                 onMove = { from, to ->
                                     toDoList.value = toDoList.value.move(from, to)
                                 },
+                                onDismiss = { toDoItem ->
+                                    toDoList.value = toDoList.value.filter { it != toDoItem }
+                                }
                             )
 
                             // Floating Action Button in bottom right corner of screen with padding

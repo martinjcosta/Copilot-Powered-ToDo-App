@@ -24,10 +24,17 @@ import org.burnoutcrew.reorderable.*
 fun DismissableToDoItem(
     toDoItem: ToDoItem,
     onCheckedChange: (Boolean) -> Unit,
-    state: ReorderableLazyListState
+    state: ReorderableLazyListState,
+    onDismiss: (ToDoItem) -> Unit
 ) {
     val dismissState = rememberDismissState(
-        initialValue = DismissValue.Default
+        initialValue = DismissValue.Default,
+        confirmStateChange = {
+            if (it == DismissValue.DismissedToStart) {
+                onDismiss(toDoItem)
+            }
+            true
+        }
     )
 
     SwipeToDismiss(
@@ -114,7 +121,8 @@ fun ToDoItem(
 fun ToDoList(
     toDoList: List<ToDoItem>,
     onCheckedChange: (ToDoItem, Boolean) -> Unit,
-    onMove: (from: Int, to: Int) -> Unit
+    onMove: (from: Int, to: Int) -> Unit,
+    onDismiss: (ToDoItem) -> Unit
 ) {
     val state = rememberReorderableLazyListState(onMove = { from, to -> onMove(from.index, to.index) } )
 
@@ -130,7 +138,8 @@ fun ToDoList(
                     onCheckedChange = { isChecked ->
                         onCheckedChange(toDoItem, isChecked)
                     },
-                    state = state
+                    state = state,
+                    onDismiss = onDismiss
                 )
             }
         })
@@ -182,7 +191,8 @@ fun ToDoListPreview() {
     ToDoList(
         toDoList = ToDoFakeData,
         onCheckedChange = { _, _ -> },
-        onMove = { _, _ -> }
+        onMove = { _, _ -> },
+        onDismiss = { }
     )
 }
 
@@ -202,7 +212,10 @@ fun DismissableToDoItemPreview() {
     DismissableToDoItem(
         toDoItem = ToDoFakeData[0],
         onCheckedChange = { },
-        state = rememberReorderableLazyListState(onMove = { _, _ -> })
+        state = rememberReorderableLazyListState(
+            onMove = { _, _ -> }
+        ),
+        onDismiss = { }
     )
 }
 

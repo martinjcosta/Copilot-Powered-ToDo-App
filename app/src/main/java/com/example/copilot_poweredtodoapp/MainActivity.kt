@@ -54,7 +54,10 @@ class MainActivity : ComponentActivity() {
                                     }
 
                                     println("ToDoItem: $toDoItem, isChecked: $isChecked")
-                                }
+                                },
+                                onMove = { from, to ->
+                                    toDoList.value = toDoList.value.move(from, to)
+                                },
                             )
 
                             // Floating Action Button in bottom right corner of screen with padding

@@ -16,6 +16,10 @@ import androidx.compose.ui.unit.dp
 import com.example.copilot_poweredtodoapp.R
 import com.example.copilot_poweredtodoapp.data.ToDoFakeData
 import com.example.copilot_poweredtodoapp.data.ToDoItem
+import org.burnoutcrew.reorderable.ReorderableItem
+import org.burnoutcrew.reorderable.detectReorderAfterLongPress
+import org.burnoutcrew.reorderable.rememberReorderableLazyListState
+import org.burnoutcrew.reorderable.reorderable
 
 
 // My To-do Item Compose UI with a checkbox, title, and description
@@ -74,16 +78,26 @@ fun ToDoItem(
 @Composable
 fun ToDoList(
     toDoList: List<ToDoItem>,
-    onCheckedChange: (ToDoItem, Boolean) -> Unit
+    onCheckedChange: (ToDoItem, Boolean) -> Unit,
+    onMove: (from: Int, to: Int) -> Unit
 ) {
-    LazyColumn {
-        items(items = toDoList, itemContent = { toDoItem ->
-            ToDoItem(
-                toDoItem = toDoItem,
-                onCheckedChange = { isChecked ->
-                    onCheckedChange(toDoItem, isChecked)
-                }
-            )
+    val state = rememberReorderableLazyListState(onMove = { from, to -> onMove(from.index, to.index) } )
+
+    LazyColumn(
+        state = state.listState,
+        modifier = Modifier
+            .reorderable(state)
+            .detectReorderAfterLongPress(state)
+    ) {
+        items(items = toDoList, key = { it.title }, itemContent = { toDoItem ->
+            ReorderableItem(reorderableState = state, key = toDoItem.title) {
+                ToDoItem(
+                    toDoItem = toDoItem,
+                    onCheckedChange = { isChecked ->
+                        onCheckedChange(toDoItem, isChecked)
+                    }
+                )
+            }
         })
     }
 }
@@ -93,7 +107,8 @@ fun ToDoList(
 fun ToDoListPreview() {
     ToDoList(
         toDoList = ToDoFakeData,
-        onCheckedChange = { _, _ -> }
+        onCheckedChange = { _, _ -> },
+        onMove = { _, _ -> }
     )
 }
 

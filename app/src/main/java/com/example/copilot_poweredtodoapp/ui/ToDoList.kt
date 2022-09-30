@@ -6,7 +6,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Card
 import androidx.compose.material.Checkbox
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -58,14 +58,14 @@ fun ToDoItem(
 @Composable
 fun ToDoList(
     toDoList: List<ToDoItem>,
-    onCheckedChange: (Int, Boolean) -> Unit
+    onCheckedChange: (ToDoItem, Boolean) -> Unit
 ) {
     LazyColumn {
         items(items = toDoList, itemContent = { toDoItem ->
             ToDoItem(
                 toDoItem = toDoItem,
                 onCheckedChange = { isChecked ->
-                    onCheckedChange(toDoList.indexOf(toDoItem), isChecked)
+                    onCheckedChange(toDoItem, isChecked)
                 }
             )
         })

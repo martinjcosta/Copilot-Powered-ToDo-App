@@ -8,6 +8,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.copilot_poweredtodoapp.data.ToDoFakeData
@@ -15,6 +16,9 @@ import com.example.copilot_poweredtodoapp.ui.ToDoList
 import com.example.copilot_poweredtodoapp.ui.theme.CopilotPoweredToDoAppTheme
 
 class MainActivity : ComponentActivity() {
+
+    private val toDoList = mutableStateOf(ToDoFakeData)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -25,8 +29,16 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     ToDoList(
-                        toDoList = ToDoFakeData,
+                        toDoList = toDoList.value,
                         onCheckedChange = { toDoItem, isChecked ->
+                            toDoList.value = toDoList.value.map {
+                                if (it == toDoItem) {
+                                    it.copy(isDone = isChecked)
+                                } else {
+                                    it
+                                }
+                            }
+
                             println("ToDoItem: $toDoItem, isChecked: $isChecked")
                         }
                     )

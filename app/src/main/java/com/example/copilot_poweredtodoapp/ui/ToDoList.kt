@@ -16,17 +16,15 @@ import androidx.compose.ui.unit.dp
 import com.example.copilot_poweredtodoapp.R
 import com.example.copilot_poweredtodoapp.data.ToDoFakeData
 import com.example.copilot_poweredtodoapp.data.ToDoItem
-import org.burnoutcrew.reorderable.ReorderableItem
-import org.burnoutcrew.reorderable.detectReorderAfterLongPress
-import org.burnoutcrew.reorderable.rememberReorderableLazyListState
-import org.burnoutcrew.reorderable.reorderable
+import org.burnoutcrew.reorderable.*
 
 
 // My To-do Item Compose UI with a checkbox, title, and description
 @Composable
 fun ToDoItem(
     toDoItem: ToDoItem,
-    onCheckedChange: (Boolean) -> Unit
+    onCheckedChange: (Boolean) -> Unit,
+    state: ReorderableLazyListState
 ) {
     Card(
         modifier = Modifier
@@ -64,6 +62,7 @@ fun ToDoItem(
             // At the end of the ToDoItem
             Image(
                 modifier = Modifier
+                    .detectReorder(state)
                     .align(Alignment.CenterVertically)
                     .padding(start = 8.dp)
                     .size(24.dp),
@@ -87,7 +86,6 @@ fun ToDoList(
         state = state.listState,
         modifier = Modifier
             .reorderable(state)
-            .detectReorderAfterLongPress(state)
     ) {
         items(items = toDoList, key = { it.title }, itemContent = { toDoItem ->
             ReorderableItem(reorderableState = state, key = toDoItem.title) {
@@ -95,7 +93,8 @@ fun ToDoList(
                     toDoItem = toDoItem,
                     onCheckedChange = { isChecked ->
                         onCheckedChange(toDoItem, isChecked)
-                    }
+                    },
+                    state = state
                 )
             }
         })
@@ -117,6 +116,7 @@ fun ToDoListPreview() {
 fun ToDoItemPreview() {
     ToDoItem(
         toDoItem = ToDoFakeData[0],
-        onCheckedChange = { }
+        onCheckedChange = { },
+        state = rememberReorderableLazyListState(onMove = { _, _ -> })
     )
 }

@@ -2,8 +2,10 @@ package com.example.copilot_poweredtodoapp.ui
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.copilot_poweredtodoapp.data.ToDoItem
 import com.example.copilot_poweredtodoapp.data.ToDoListRepository
+import kotlinx.coroutines.launch
 
 class ToDoListVM(
     private val toDoListRepository: ToDoListRepository
@@ -16,11 +18,14 @@ class ToDoListVM(
     fun addToDoItem(toDoItem: ToDoItem) {
         addNewToDoItemState.value = addNewToDoItemState.value.titleChanged(toDoItem.title)
         addNewToDoItemState.value = addNewToDoItemState.value.descriptionChanged(toDoItem.description)
-        addNewToDoItemState.value = addNewToDoItemState.value.validateForm()
 
-        if (addNewToDoItemState.value.isFormValid) {
-            toDoList.value = toDoList.value + toDoItem
-            addNewToDoItemState.value = addNewToDoItemState.value.copy(show = false)
+        viewModelScope.launch {
+            addNewToDoItemState.value = addNewToDoItemState.value.validateForm()
+
+            if (addNewToDoItemState.value.isFormValid) {
+                toDoList.value = toDoList.value + toDoItem
+                addNewToDoItemState.value = addNewToDoItemState.value.copy(show = false)
+            }
         }
     }
 

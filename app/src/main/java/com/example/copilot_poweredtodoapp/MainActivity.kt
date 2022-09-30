@@ -88,17 +88,9 @@ class MainActivity : ComponentActivity() {
                                             isDone = false
                                         )
                                     )
-
-                                    viewModel.addNewToDoItemState.value =
-                                        viewModel.addNewToDoItemState.value.copy(
-                                            show = false
-                                        )
                                 },
                                 onCancel = {
-                                    viewModel.addNewToDoItemState.value =
-                                        viewModel.addNewToDoItemState.value.copy(
-                                            show = false
-                                        )
+                                    viewModel.cancelAddNewToDoItem()
                                 }
                             )
                         }

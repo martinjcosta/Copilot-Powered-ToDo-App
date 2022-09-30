@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.copilot_poweredtodoapp.data.ToDoItem
 
 // Full Screen that allows users to create a new ToDoItem
 // There is a text field for the title and description
@@ -21,14 +22,15 @@ import androidx.compose.ui.unit.dp
 fun AddNewToDoItemScreen(
     modifier: Modifier = Modifier,
     onSave: (title: String, description: String) -> Unit,
-    onCancel: () -> Unit
+    onCancel: () -> Unit,
+    toDoItem: ToDoItem? = null
 ) {
     val titleState = remember {
-        mutableStateOf(TextFieldValue())
+        mutableStateOf(TextFieldValue(toDoItem?.title ?: ""))
     }
 
     val descriptionState = remember {
-        mutableStateOf(TextFieldValue())
+        mutableStateOf(TextFieldValue(toDoItem?.description ?: ""))
     }
 
     Card(

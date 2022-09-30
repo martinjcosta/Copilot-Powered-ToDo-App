@@ -1,6 +1,7 @@
 package com.example.copilot_poweredtodoapp.ui
 
 import android.util.Log
+import com.example.copilot_poweredtodoapp.data.ToDoItem
 import com.example.copilot_poweredtodoapp.data.client
 import io.ktor.client.call.*
 import io.ktor.client.request.*
@@ -15,7 +16,8 @@ data class AddNewToDoItemState(
     val isDescriptionValid: Boolean = false,
     val isFormValid: Boolean = false,
     val showToast: Boolean = false,
-    val loading: Boolean = false
+    val loading: Boolean = false,
+    val toDoItem: ToDoItem? = null // Being edited
 ) {
     fun titleChanged(title: String) = copy(title = title, isTitleValid = title.isNotBlank())
     fun descriptionChanged(description: String) =

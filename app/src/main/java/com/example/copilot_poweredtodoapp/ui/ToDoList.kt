@@ -3,6 +3,7 @@ package com.example.copilot_poweredtodoapp.ui
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -25,7 +26,8 @@ fun DismissableToDoItem(
     toDoItem: ToDoItem,
     onCheckedChange: (Boolean) -> Unit,
     state: ReorderableLazyListState,
-    onDismiss: (ToDoItem) -> Unit
+    onDismiss: (ToDoItem) -> Unit,
+    onEdit: (ToDoItem) -> Unit
 ) {
     val dismissState = rememberDismissState(
         initialValue = DismissValue.Default,
@@ -55,7 +57,8 @@ fun DismissableToDoItem(
             ToDoItem(
                 toDoItem = toDoItem,
                 onCheckedChange = onCheckedChange,
-                state = state
+                state = state,
+                onEdit = onEdit
             )
         },
         directions = setOf(DismissDirection.EndToStart)
@@ -67,7 +70,8 @@ fun DismissableToDoItem(
 fun ToDoItem(
     toDoItem: ToDoItem,
     onCheckedChange: (Boolean) -> Unit,
-    state: ReorderableLazyListState
+    state: ReorderableLazyListState,
+    onEdit: (ToDoItem) -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -100,6 +104,16 @@ fun ToDoItem(
             }
             Spacer(modifier = Modifier.weight(1f))
 
+            // Pencil icon that allows the user to edit the ToDoItem
+            Image(
+                painter = painterResource(id = R.drawable.ic_edit),
+                contentDescription = "Edit",
+                modifier = Modifier
+                    .padding(8.dp)
+                    .size(24.dp)
+                    .align(Alignment.CenterVertically)
+                    .clickable { onEdit(toDoItem) }
+            )
 
             // Handle that allows the user to drag and drop the item
             // At the end of the ToDoItem
@@ -122,7 +136,8 @@ fun ToDoList(
     toDoList: List<ToDoItem>,
     onCheckedChange: (ToDoItem, Boolean) -> Unit,
     onMove: (from: Int, to: Int) -> Unit,
-    onDismiss: (ToDoItem) -> Unit
+    onDismiss: (ToDoItem) -> Unit,
+    onEdit: (ToDoItem) -> Unit
 ) {
     val state = rememberReorderableLazyListState(onMove = { from, to -> onMove(from.index, to.index) } )
 
@@ -139,7 +154,8 @@ fun ToDoList(
                         onCheckedChange(toDoItem, isChecked)
                     },
                     state = state,
-                    onDismiss = onDismiss
+                    onDismiss = onDismiss,
+                    onEdit = onEdit
                 )
             }
         })
@@ -192,7 +208,8 @@ fun ToDoListPreview() {
         toDoList = ToDoFakeData,
         onCheckedChange = { _, _ -> },
         onMove = { _, _ -> },
-        onDismiss = { }
+        onDismiss = { },
+        onEdit = { }
     )
 }
 
@@ -202,7 +219,8 @@ fun ToDoItemPreview() {
     ToDoItem(
         toDoItem = ToDoFakeData[0],
         onCheckedChange = { },
-        state = rememberReorderableLazyListState(onMove = { _, _ -> })
+        state = rememberReorderableLazyListState(onMove = { _, _ -> }),
+        onEdit = { }
     )
 }
 
@@ -215,7 +233,8 @@ fun DismissableToDoItemPreview() {
         state = rememberReorderableLazyListState(
             onMove = { _, _ -> }
         ),
-        onDismiss = { }
+        onDismiss = { },
+        onEdit = { }
     )
 }
 

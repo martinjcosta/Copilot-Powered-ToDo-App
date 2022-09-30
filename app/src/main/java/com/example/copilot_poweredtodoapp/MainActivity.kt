@@ -68,6 +68,12 @@ class MainActivity : ComponentActivity() {
                                 },
                                 onDismiss = { toDoItem ->
                                     toDoList.value = toDoList.value.filter { it != toDoItem }
+                                },
+                                onEdit = { toDoItem ->
+                                    viewModel.addNewToDoItemState.value = viewModel.addNewToDoItemState.value.copy(
+                                        show = true,
+                                        toDoItem = toDoItem
+                                    )
                                 }
                             )
 
@@ -79,7 +85,8 @@ class MainActivity : ComponentActivity() {
                                 onClick = {
                                     viewModel.addNewToDoItemState.value =
                                         viewModel.addNewToDoItemState.value.copy(
-                                            show = true
+                                            show = true,
+                                            toDoItem = null
                                         )
                                 }
                             )
@@ -100,7 +107,8 @@ class MainActivity : ComponentActivity() {
                                 },
                                 onCancel = {
                                     viewModel.cancelAddNewToDoItem()
-                                }
+                                },
+                                toDoItem = viewModel.addNewToDoItemState.value.toDoItem
                             )
 
                             AnimatedVisibility(

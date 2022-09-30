@@ -72,7 +72,6 @@ fun ToDoList(
     }
 }
 
-
 @Preview
 @Composable
 fun ToDoListPreview() {
